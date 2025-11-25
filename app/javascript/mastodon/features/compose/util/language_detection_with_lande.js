@@ -18,21 +18,13 @@ const guessLanguage = (text) => {
   return '';
 };
 
-const debouncedGuess = (() => {
-  let resolver = null;
-
-  const debounced = debounce((text) => {
+const debouncedGuess = debounce(
+  (text, callback) => {
     const result = guessLanguage(text);
-    if (resolver) {
-      resolver(result);
-      resolver = null;
-    }
-  }, 500, { maxWait: 1500, leading: true, trailing: true });
-
-  return (text) => new Promise((resolve) => {
-    resolver = resolve;
-    debounced(text);
-  });
-})();
+    callback(result);
+  },
+  500,
+  { maxWait: 1500, leading: true, trailing: true },
+);
 
 export { debouncedGuess };

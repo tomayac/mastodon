@@ -380,27 +380,14 @@ export const LanguageDropdown: React.FC = () => {
     if (isTextLongEnoughForGuess(text)) {
       debouncedGuess(text, setGuess);
     } else {
+      setGuess('');
       debouncedGuess.cancel();
     }
 
     return () => {
-      canceled = true;
+      debouncedGuess.cancel();
     };
   }, [text, setGuess]);
-
-  // Keeping track of the previous render's text length here
-  // to be able to reset the guess when the text length drops
-  // below the threshold needed to make a guess
-  const [wasLongText, setWasLongText] = useState(() =>
-    isTextLongEnoughForGuess(text),
-  );
-  if (wasLongText !== isTextLongEnoughForGuess(text)) {
-    setWasLongText(isTextLongEnoughForGuess(text));
-
-    if (wasLongText) {
-      setGuess('');
-    }
-  }
 
   return (
     <div ref={targetRef}>
